@@ -1,0 +1,4 @@
+Pillow==8.4.0                  # Manipulação de imagens
+pytube==11.0.1                 # Biblioteca para baixar vídeos do YouTube
+moviepy==1.0.3                 # Biblioteca para editar vídeos
+requests==2.26.0               # Requisições HTTP
