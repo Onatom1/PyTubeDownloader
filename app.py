@@ -9,45 +9,48 @@ from tkinter.ttk import Progressbar
 import os
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
-################# cores ###############
+# Cores utilizadas no programa
 cor0 = "#444466"  # Preta
-cor1 = "#feffff"  # branca
-cor2 = "#6f9fbd"  # azul
-cor3 = "#38576b"  # valor
-cor4 = "#403d3d"  # letra
+cor1 = "#feffff"  # Branca
+cor2 = "#6f9fbd"  # Azul
+cor3 = "#38576b"  # Valor
+cor4 = "#403d3d"  # Letra
 
-background = "#3b3b3b"
+background = "#3b3b3b"  # Cor de fundo da interface
 
+# Configuração da janela principal
 janela = Tk()
 janela.title('')
 janela.geometry('500x300')
 janela.configure(bg=background)
 
-################# Frames ####################
-
+# Criação de um separador horizontal na janela
 ttk.Separator(janela, orient=HORIZONTAL).grid(row=0, columnspan=1, ipadx=250)
 
-frame_principal = Frame(janela, width=500, height=110, bg=background, pady=5, padx=0, relief="flat", )
+# Frame principal
+frame_principal = Frame(janela, width=500, height=110, bg=background, pady=5, padx=0, relief="flat")
 frame_principal.grid(row=1, column=0)
 
-frame_quadros = Frame(janela, width=500, height=300, bg=background, pady=12, padx=0, relief="flat", )
+# Frame de quadros
+frame_quadros = Frame(janela, width=500, height=300, bg=background, pady=12, padx=0, relief="flat")
 frame_quadros.grid(row=2, column=0, sticky=NW)
 
+# Logo do YouTube
 logo = Image.open('image/youtube.png')
 logo = logo.resize((50, 50), Image.BICUBIC)
 logo = ImageTk.PhotoImage(logo)
 l_logo = Label(frame_principal, image=logo, compound=LEFT, bg=background, fg="white", font=('Ivy 10 bold'), anchor="nw", relief=FLAT)
 l_logo.place(x=5, y=10)
 
-# LOGO:
+# Logo personalizada
 img_0 = Image.open('image/log.png')
-img_0 = img_0.resize((45, 45), Image.BICUBIC)  # Adicionado o método de redimensionamento
+img_0 = img_0.resize((45, 45), Image.BICUBIC)
 img_0 = ImageTk.PhotoImage(img_0)
 logo_label = Label(frame_principal, image=img_0, bg=background)
-logo_label.image = img_0  # Garante que a imagem não seja coletada pelo coletor de lixo
-logo_label.place(x=440, y=10)  # Ajuste a posição conforme necessário
+logo_label.image = img_0
+logo_label.place(x=440, y=10)
 
-
+# Nome do aplicativo
 app_nome = Label(frame_principal, text="YouTube Downloader app", width=30, height=1, padx=0, relief="flat", anchor="nw", font=('Ivy 15 bold'), bg=background, fg=cor1)
 app_nome.place(x=65, y=15)
 
@@ -57,22 +60,16 @@ def search():
     yt = YouTube(url)
     l_concluido.place_forget()
 
-    # Title of video
+    # Obtém informações sobre o vídeo
     title = yt.title
-    # Number of views of video
     view = yt.views
-
-    # Length of the video
     duration = str(datetime.timedelta(seconds=yt.length))
-
-    # Description of video
     Description = yt.description
-
-    # cover of the video
     cover = yt.thumbnail_url
 
     print(cover)
 
+    # Exibe a imagem do vídeo
     img_ = Image.open(requests.get(cover, stream=True).raw)
     img_ = img_.resize((230, 150), Image.BICUBIC)
     img_ = ImageTk.PhotoImage(img_)
@@ -80,6 +77,7 @@ def search():
     img = img_
     l_image['image'] = img
 
+    # Atualiza os rótulos com informações do vídeo
     l_title['text'] = "Titulo: " + str(title)
     l_view['text'] = "Views: " + str('{:,}'.format(view))
     l_time['text'] = "Duracao: " + str(duration)
@@ -155,6 +153,7 @@ def download(audio=False):
     bar.place_forget()
     l_concluido.place(x=250, y=120)
 
+# Rótulos e entrada de URL
 l_url = Label(frame_principal, text="Digite a URL", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=background, fg=cor1)
 l_url.place(x=10, y=80)
 
@@ -164,8 +163,7 @@ e_url.place(x=100, y=80)
 b_search = Button(frame_principal, text="Search", width=10, height=1, bg=cor2, fg=cor1, font=('Ivy 7 bold'),relief=RAISED, overrelief=RIDGE, command=lambda: search())
 b_search.place(x=404, y=80)
 
-################ Operations ####################
-
+# Quadros de operações
 l_image = Label(frame_quadros, compound=LEFT, bg=background, fg="white", font=('Ivy 10 bold'), anchor="nw", relief=FLAT)
 l_image.place(x=10, y=10)
 
@@ -181,11 +179,13 @@ l_time.place(x=250, y=85)
 # Rótulo de conclusão
 l_concluido = Label(frame_quadros, text="Concluído!", font=('Ivy 10 bold'), bg=background, fg=cor1)
 
+# Botões de download
 b_download_audio = Button(frame_quadros, text="Download Áudio", width=15, height=1, bg=cor2, fg=cor1,font=('Ivy 10 bold'), relief=FLAT, overrelief=RIDGE, command=download_audio)
 b_download_video = Button(frame_quadros, text="Download Vídeo", width=15, height=1, bg=cor2, fg=cor1,font=('Ivy 10 bold'), relief=FLAT, overrelief=RIDGE, command=download_video)
 b_download_audio.place_forget()
 b_download_video.place_forget()
 
+# Estilo da barra de progresso
 style = ttk.Style()
 style.theme_use('default')
 style.configure("black.Horizontal.TProgressbar", background='#00E676')
@@ -193,9 +193,9 @@ style.configure("TProgressbar", thickness=6)
 
 bar = Progressbar(frame_quadros, length=100, style='black.Horizontal.TProgressbar')
 
-# Rodapé --------------------------------------------------------------
+# Rodapé
 rodape_label = Label(janela, text='By Yury Mota', font=('Verdana 7'), bg=background, fg='#feffff')
-rodape_label.place(relx=0.08, rely=0.94, anchor=N)
+rodape_label.place(relx=0.08, rely=0.954, anchor=N)
 
-
+# Inicia o loop principal da interface gráfica
 janela.mainloop()
